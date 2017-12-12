@@ -25,5 +25,5 @@ android {
 
 dependencies {
     api deps.appCompat
-    api 'com.github.umutyusuf:expandablerecyclerview:0bbf4de5c3'
+    compile 'com.github.umutyusuf:expandablerecyclerview:master-SNAPSHOT'
 }
