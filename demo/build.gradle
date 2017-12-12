@@ -25,5 +25,5 @@ android {
 
 dependencies {
     api deps.appCompat
-    compile 'com.github.umutyusuf:expandablerecyclerview:buildIssue-SNAPSHOT'
+    compile project(':expandablrecyclerview')
 }
