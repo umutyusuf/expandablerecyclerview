@@ -5,6 +5,5 @@
 /build
 /captures
 .externalNativeBuild
-gradlew*
 /gradle
 .idea/
