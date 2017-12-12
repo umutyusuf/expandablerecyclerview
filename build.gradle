@@ -15,6 +15,7 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -27,6 +28,6 @@ ext.versions = [
 ]
 
 ext.deps = [
-        appCompat: "com.android.support:appcompat-v7:$versions.androidSupport",
+        appCompat   : "com.android.support:appcompat-v7:$versions.androidSupport",
         recyclerView: "com.android.support:recyclerview-v7:$versions.androidSupport"
 ]
