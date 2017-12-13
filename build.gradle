@@ -8,6 +8,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:2.0'
     }
 }
 
@@ -15,7 +16,6 @@ allprojects {
     repositories {
         google()
         jcenter()
-        maven { url 'https://jitpack.io' }
     }
 }
 
@@ -28,6 +28,7 @@ ext.versions = [
 ]
 
 ext.deps = [
-        appCompat   : "com.android.support:appcompat-v7:$versions.androidSupport",
-        recyclerView: "com.android.support:recyclerview-v7:$versions.androidSupport"
+        appCompat         : "com.android.support:appcompat-v7:$versions.androidSupport",
+        recyclerView      : "com.android.support:recyclerview-v7:$versions.androidSupport",
+        supportAnnotations: "com.android.support:support-annotations:$versions.androidSupport"
 ]

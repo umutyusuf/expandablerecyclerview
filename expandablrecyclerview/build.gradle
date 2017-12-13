@@ -1,4 +1,7 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.github.dcendents.android-maven'
+
+group='com.github.umutyusuf'
 
 android {
     compileSdkVersion 26
@@ -8,20 +11,12 @@ android {
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-    }
-
-    buildTypes {
-        release {
-            minifyEnabled true
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
+        consumerProguardFiles 'proguard-rules.pro'
     }
 
 }
 
 dependencies {
     api deps.recyclerView
+    api deps.supportAnnotations
 }

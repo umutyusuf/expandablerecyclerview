@@ -13,7 +13,7 @@ android {
     }
     buildTypes {
         release {
-            minifyEnabled true
+            minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
@@ -24,6 +24,6 @@ android {
 }
 
 dependencies {
-    api deps.appCompat
-    api 'com.github.umutyusuf:expandablerecyclerview:0bbf4de5c3'
+    implementation deps.appCompat
+    implementation project(':expandablrecyclerview')
 }
