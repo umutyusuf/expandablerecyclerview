@@ -45,7 +45,7 @@ public class AdapterIndexConverter {
         return totalItemCount;
     }
 
-    public int getCountTillParentIndex(int index) {
+    public int getParentAdapterIndex(int index) {
         return defaultIndexProvider.getAdapterIndexForParentAt(index);
     }
 

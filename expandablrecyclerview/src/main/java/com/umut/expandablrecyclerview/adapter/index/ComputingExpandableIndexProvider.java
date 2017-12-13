@@ -114,7 +114,7 @@ public class ComputingExpandableIndexProvider<T> implements ExpandableIndexProvi
                 return getChildCoordinate((dataProvider.getParentSize() - 1), adapterPosition,
                         totalItemCount);
             } catch (Exception e) {
-                Log.e(ExpandableViewAdapter.class.getName(), "Failed to get child");
+                Log.e(ComputingExpandableIndexProvider.class.getName(), "Failed to get child");
             }
         }
         return null;
