@@ -24,7 +24,7 @@ task clean(type: Delete) {
 }
 
 ext.versions = [
-        androidSupport: "26.1.0"
+        androidSupport: "25.2.0"
 ]
 
 ext.deps = [
