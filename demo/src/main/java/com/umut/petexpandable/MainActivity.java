@@ -14,10 +14,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         RecyclerView view = findViewById(R.id.recycler_view_music_genres);
-        MusicExpandableViewAdapter adapter = new MusicExpandableViewAdapter();
+        MusicExpandableViewAdapter adapter = new MusicExpandableViewAdapter(
+                TestData.mainStreamGenres,
+                TestData.subGenres);
         view.setAdapter(adapter);
 
-        for (int i = 0; i < SampleDataProvider.mainStreamGenres.size(); i++) {
+        for (int i = 0; i < TestData.mainStreamGenres.size(); i++) {
             adapter.toggle(i);
         }
     }

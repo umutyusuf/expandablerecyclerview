@@ -1,4 +1,4 @@
-package com.umut.expandablrecyclerview.adapter;
+package com.umut.expandablrecyclerview.adapter.holder;
 
 
 import android.support.annotation.NonNull;
@@ -16,12 +16,9 @@ public abstract class ExpandableViewHolder<T> extends RecyclerView.ViewHolder {
     /**
      * binds the value to view holder
      *
-     * @param value              value for the item for calculated position
-     * @param parentDataPosition position of the parent in data
+     * @param coordinate Coordinate of item
      */
-    public abstract void bind(T value, int parentDataPosition);
+    public abstract void bind(@NonNull T coordinate);
 
-    public void bindPartial(@NonNull List<Object> value, int parentDataPosition) {
-
-    }
+    public abstract boolean update(@NonNull List<Object> payload, @NonNull T coordinate);
 }

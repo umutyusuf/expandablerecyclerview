@@ -6,7 +6,10 @@ import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
-import com.umut.expandablrecyclerview.adapter.data.ExpandableDataProvider;
+import com.umut.expandablrecyclerview.adapter.data.ExpandableDataIndexProvider;
+import com.umut.expandablrecyclerview.adapter.holder.ChildViewHolder;
+import com.umut.expandablrecyclerview.adapter.holder.ExpandableViewHolder;
+import com.umut.expandablrecyclerview.adapter.holder.ParentViewHolder;
 import com.umut.expandablrecyclerview.adapter.index.AdapterIndexConverter;
 import com.umut.expandablrecyclerview.adapter.index.ComputingExpandableIndexProvider;
 
@@ -16,21 +19,20 @@ import java.util.List;
 
 import static com.umut.expandablrecyclerview.adapter.ExpandableViewAdapter.State.COLLAPSED;
 import static com.umut.expandablrecyclerview.adapter.ExpandableViewAdapter.State.EXPANDED;
-import static com.umut.expandablrecyclerview.adapter.index.ExpandableIndexProvider.ViewType.CHILD;
 import static com.umut.expandablrecyclerview.adapter.index.ExpandableIndexProvider.ViewType.PARENT;
 
-public abstract class ExpandableViewAdapter<P, C> extends RecyclerView.Adapter<ExpandableViewHolder> {
+public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<ExpandableViewHolder> {
 
     @NonNull
     private final AdapterIndexConverter adapterIndexConverter;
 
     @NonNull
-    private final ExpandableDataProvider<P, C> dataProvider;
+    private final ExpandableDataIndexProvider dataProvider;
 
-    public ExpandableViewAdapter(@NonNull ExpandableDataProvider<P, C> dataProvider) {
+    public ExpandableViewAdapter(@NonNull ExpandableDataIndexProvider dataProvider) {
         this.dataProvider = dataProvider;
         this.adapterIndexConverter =
-                new AdapterIndexConverter(new ComputingExpandableIndexProvider<>(dataProvider));
+                new AdapterIndexConverter(new ComputingExpandableIndexProvider(dataProvider));
     }
 
     @Override
@@ -39,35 +41,31 @@ public abstract class ExpandableViewAdapter<P, C> extends RecyclerView.Adapter<E
                 createChildViewHolder(parent);
     }
 
-    @Override
     @SuppressWarnings("unchecked")
+    @Override
     public void onBindViewHolder(ExpandableViewHolder holder, int position) {
-        int viewType = adapterIndexConverter.findViewType(position);
-        switch (viewType) {
-            case CHILD:
-                ChildCoordinate childCoordinate = adapterIndexConverter.getChildCoordinate(position);
-                holder.bind(dataProvider.getChild(childCoordinate), childCoordinate.parentIndex);
-                break;
-            case PARENT:
-                int parentPosition = adapterIndexConverter.getParentPosition(position);
-                holder.bind(dataProvider.getParent(parentPosition), parentPosition);
+        if (holder instanceof ParentViewHolder) {
+            holder.bind(adapterIndexConverter.getParentPosition(position));
+        } else if (holder instanceof ChildViewHolder) {
+            holder.bind(adapterIndexConverter.getChildCoordinate(position));
         }
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public void onBindViewHolder(ExpandableViewHolder holder, int position, List<Object> payloads) {
-        if (payloads == null || payloads.isEmpty()) {
+    public void onBindViewHolder(ExpandableViewHolder holder, int position, @NonNull List<Object> payloads) {
+        if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads);
+            return;
         }
-        int viewType = adapterIndexConverter.findViewType(position);
-        switch (viewType) {
-            case CHILD:
-                ChildCoordinate childCoordinate = adapterIndexConverter.getChildCoordinate(position);
-                holder.bindPartial(payloads, childCoordinate.parentIndex);
-                break;
-            case PARENT:
-                int parentPosition = adapterIndexConverter.getParentPosition(position);
-                holder.bindPartial(payloads, parentPosition);
+        boolean binded = false;
+        if (holder instanceof ParentViewHolder) {
+            binded = holder.update(payloads, adapterIndexConverter.getParentPosition(position));
+        } else if (holder instanceof ChildViewHolder) {
+            binded = holder.update(payloads, adapterIndexConverter.getChildCoordinate(position));
+        }
+        if (!binded) {
+            super.onBindViewHolder(holder, position, payloads);
         }
     }
 
@@ -81,22 +79,19 @@ public abstract class ExpandableViewAdapter<P, C> extends RecyclerView.Adapter<E
         return adapterIndexConverter.findViewType(position);
     }
 
-    protected abstract ExpandableViewHolder<P> createParentViewHolder(@NonNull ViewGroup container);
+    protected abstract ParentViewHolder createParentViewHolder(@NonNull ViewGroup container);
 
-    protected abstract ExpandableViewHolder<C> createChildViewHolder(@NonNull ViewGroup container);
+    protected abstract ChildViewHolder createChildViewHolder(@NonNull ViewGroup container);
 
-    @State
-    public int toggle(int index) {
+    public void toggle(int index) {
         if (index < 0 || index > dataProvider.getParentSize()) {
             throw new IllegalArgumentException("Cant expand the given index. Parent Size = " +
                     dataProvider.getParentSize() + ", index = " + index);
         }
         if (!adapterIndexConverter.isParentExpanded(index)) {
             expand(index);
-            return EXPANDED;
         } else {
             collapse(index);
-            return COLLAPSED;
         }
     }
 
@@ -123,23 +118,21 @@ public abstract class ExpandableViewAdapter<P, C> extends RecyclerView.Adapter<E
     }
 
     private void expand(int index) {
-        P p = dataProvider.getParent(index);
-        int itemCountUpToParent = adapterIndexConverter.getParentAdapterIndex(index);
-        notifyItemRangeInserted(itemCountUpToParent + 1, dataProvider.getChildrenSize(p));
+        int parentAdapterIndex = adapterIndexConverter.getParentAdapterIndex(index);
+        notifyItemRangeInserted(parentAdapterIndex + 1, dataProvider.getChildrenSize(index));
         adapterIndexConverter.expandParent(index);
     }
 
     private void collapse(int index) {
-        P p = dataProvider.getParent(index);
-        int itemCountUpToParent = adapterIndexConverter.getParentAdapterIndex(index);
-        notifyItemRangeRemoved(itemCountUpToParent + 1, dataProvider.getChildrenSize(p));
+        int parentAdapterIndex = adapterIndexConverter.getParentAdapterIndex(index);
+        notifyItemRangeRemoved(parentAdapterIndex + 1, dataProvider.getChildrenSize(index));
         adapterIndexConverter.collapseParent(index);
     }
 
     @IntDef({EXPANDED, COLLAPSED})
     @Retention(RetentionPolicy.SOURCE)
     public @interface State {
-        int EXPANDED = -1;
-        int COLLAPSED = 1;
+        int EXPANDED = 0x0001;
+        int COLLAPSED = 0x0010;
     }
 }

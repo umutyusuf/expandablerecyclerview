@@ -2,24 +2,22 @@ package com.umut.expandablrecyclerview.adapter.index;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.umut.expandablrecyclerview.adapter.ChildCoordinate;
-import com.umut.expandablrecyclerview.adapter.data.ExpandableDataProvider;
-import com.umut.expandablrecyclerview.adapter.ExpandableViewAdapter;
+import com.umut.expandablrecyclerview.adapter.data.ExpandableDataIndexProvider;
 
 import java.util.HashSet;
 import java.util.Set;
 
-public class ComputingExpandableIndexProvider<T> implements ExpandableIndexProvider {
+public class ComputingExpandableIndexProvider implements ExpandableIndexProvider {
 
     @NonNull
-    private final ExpandableDataProvider<T, ?> dataProvider;
+    private final ExpandableDataIndexProvider dataProvider;
 
     @NonNull
-    private final Set<T> expandedParents;
+    private final Set<Integer> expandedParents;
 
-    public ComputingExpandableIndexProvider(@NonNull ExpandableDataProvider<T, ?> dataProvider) {
+    public ComputingExpandableIndexProvider(@NonNull ExpandableDataIndexProvider dataProvider) {
         this.dataProvider = dataProvider;
         expandedParents = new HashSet<>();
     }
@@ -27,8 +25,8 @@ public class ComputingExpandableIndexProvider<T> implements ExpandableIndexProvi
     @Override
     public int getTotalItemCount() {
         int totalCount = dataProvider.getParentSize();
-        for (T parent : expandedParents) {
-            totalCount += dataProvider.getChildren(parent).size();
+        for (Integer parent : expandedParents) {
+            totalCount += dataProvider.getChildrenSize(parent);
         }
         return totalCount;
     }
@@ -36,11 +34,9 @@ public class ComputingExpandableIndexProvider<T> implements ExpandableIndexProvi
     @Override
     public int getAdapterIndexForParentAt(int adapterParentIndex) {
         int currentCount = adapterParentIndex;
-        T parent;
         for (int i = 0; i < adapterParentIndex; i++) {
-            parent = dataProvider.getParent(i);
-            if (expandedParents.contains(parent)) {
-                currentCount += dataProvider.getChildren(parent).size();
+            if (expandedParents.contains(i)) {
+                currentCount += dataProvider.getChildrenSize(i);
             }
         }
         return currentCount;
@@ -49,15 +45,13 @@ public class ComputingExpandableIndexProvider<T> implements ExpandableIndexProvi
     @Override
     public int getViewType(int position) {
         int nextParentIndex = 0;
-        T parent;
         for (int i = 0; i < dataProvider.getParentSize(); i++) {
             if (position == nextParentIndex) {
                 return ViewType.PARENT;
             }
-            parent = dataProvider.getParent(i);
             nextParentIndex++;
-            if (expandedParents.contains(parent)) {
-                nextParentIndex += dataProvider.getChildren(parent).size();
+            if (expandedParents.contains(i)) {
+                nextParentIndex += dataProvider.getChildrenSize(i);
             }
         }
         return ViewType.CHILD;
@@ -66,65 +60,59 @@ public class ComputingExpandableIndexProvider<T> implements ExpandableIndexProvi
     @Override
     public int parentIndexFromAdapterPosition(int adapterPosition) {
         int nextParentIndex = 0;
-        T parent;
         for (int i = 0; i < dataProvider.getParentSize(); i++) {
             if (adapterPosition == nextParentIndex) {
                 return i;
             }
-            parent = dataProvider.getParent(i);
             nextParentIndex++;
-            if (expandedParents.contains(parent)) {
-                nextParentIndex += dataProvider.getChildren(parent).size();
+            if (expandedParents.contains(i)) {
+                nextParentIndex += dataProvider.getChildrenSize(i);
             }
         }
-        Log.e(ExpandableViewAdapter.class.getName(), "Parent Value mismatch");
-        return 0;
+        throw new IllegalStateException("Parent index can not be computed");
     }
 
     @Override
     public boolean isExpanded(int dataPosition) {
-        return expandedParents.contains(dataProvider.getParent(dataPosition));
+        return expandedParents.contains(dataPosition);
     }
 
     @Override
     public void onExpand(int dataPosition) {
-        this.expandedParents.add(dataProvider.getParent(dataPosition));
+        this.expandedParents.add(dataPosition);
     }
 
     @Override
     public void onCollapse(int dataPosition) {
-        this.expandedParents.remove(dataProvider.getParent(dataPosition));
+        this.expandedParents.remove(dataPosition);
     }
 
     @Override
     @Nullable
     public ChildCoordinate getChildCoordinateFromAdapterIndex(int adapterPosition) {
         int totalItemCount = 0;
-        T p;
         for (int i = 0; i < dataProvider.getParentSize(); i++) {
-            p = dataProvider.getParent(i);
             if (adapterPosition < totalItemCount) {
                 return getChildCoordinate(i - 1, adapterPosition, totalItemCount);
             }
             totalItemCount++;
-            totalItemCount += expandedParents.contains(p) ? dataProvider.getChildren(p).size() : 0;
+            totalItemCount += expandedParents.contains(i) ? dataProvider.getChildrenSize(i) : 0;
         }
         if (adapterPosition < totalItemCount) {
             try {
                 return getChildCoordinate((dataProvider.getParentSize() - 1), adapterPosition,
                         totalItemCount);
             } catch (Exception e) {
-                Log.e(ComputingExpandableIndexProvider.class.getName(), "Failed to get child");
+                throw new IllegalStateException("Child Coordinate can not be computed", e);
             }
         }
-        return null;
+        throw new IllegalStateException("Child Coordinate can not be computed");
     }
 
     private ChildCoordinate getChildCoordinate(int parentIndex, int adapterPosition,
                                                int markedItemCount) {
-        T previousParent = dataProvider.getParent(parentIndex);
         int childPositionInParent = adapterPosition -
-                (markedItemCount - dataProvider.getChildren(previousParent).size());
+                (markedItemCount - dataProvider.getChildrenSize(parentIndex));
         return new ChildCoordinate(parentIndex, childPositionInParent);
     }
 }

@@ -1,9 +1,5 @@
 package com.umut.petexpandable;
 
-import android.support.annotation.NonNull;
-
-import com.umut.expandablrecyclerview.adapter.ChildCoordinate;
-import com.umut.expandablrecyclerview.adapter.data.ExpandableDataProvider;
 import com.umut.petexpandable.model.MainStreamGenre;
 import com.umut.petexpandable.model.SubGenre;
 
@@ -13,13 +9,18 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SampleDataProvider implements ExpandableDataProvider<MainStreamGenre, SubGenre> {
+public final class TestData {
+
+    private TestData() {
+
+    }
+
     public static List<MainStreamGenre> mainStreamGenres;
-    private static Map<MainStreamGenre, List<SubGenre>> subGenres;
+    public static Map<MainStreamGenre, List<SubGenre>> subGenres;
 
     static {
         mainStreamGenres = getMainStreamGenres();
-        for (int i = 0; i < 1000; i++) {
+        for (int i = 0; i < 10; i++) {
             mainStreamGenres.addAll(getMainStreamGenres());
         }
 
@@ -79,32 +80,5 @@ public class SampleDataProvider implements ExpandableDataProvider<MainStreamGenr
     static List<MainStreamGenre> getMainStreamGenres() {
         return new ArrayList<>(Arrays.asList(new MainStreamGenre("ROCK"),
                 new MainStreamGenre("BLUES"), new MainStreamGenre("JAZZ")));
-    }
-
-    @NonNull
-    @Override
-    public List<SubGenre> getChildren(@NonNull MainStreamGenre parent) {
-        return subGenres.get(parent);
-    }
-
-    @NonNull
-    @Override
-    public SubGenre getChild(@NonNull ChildCoordinate coordinate) {
-        return subGenres.get(mainStreamGenres.get(coordinate.parentIndex)).get(coordinate.childRelativeIndex);
-    }
-
-    @Override
-    public int getChildrenSize(MainStreamGenre parent) {
-        return subGenres.get(parent).size();
-    }
-
-    @Override
-    public int getParentSize() {
-        return mainStreamGenres.size();
-    }
-
-    @Override
-    public MainStreamGenre getParent(int index) {
-        return mainStreamGenres.get(index);
     }
 }
