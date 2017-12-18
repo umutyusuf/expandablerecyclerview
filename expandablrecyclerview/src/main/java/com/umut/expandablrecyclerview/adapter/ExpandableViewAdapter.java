@@ -60,8 +60,7 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
             super.onBindViewHolder(holder, position, payloads);
             return;
         }
-        if (!(payloads.get(0) instanceof Integer &&
-                ((Integer) payloads.get(0) ^ EXPANDED) != 0 || ((Integer) payloads.get(0) ^ COLLAPSED) != 0)) {
+        if (payloads.get(0) instanceof Integer && isStateChange((Integer) payloads.get(0))) {
             boolean binded = false;
             if (holder instanceof ParentViewHolder) {
                 int parentPosition = adapterIndexConverter.getParentPosition(position);
@@ -123,21 +122,25 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
         notifyItemChanged(adapterParentIndex);
     }
 
-
     public void notifyParent(int parentDataIndex, @Nullable Object payload) {
         int adapterParentIndex = adapterIndexConverter.getParentAdapterIndex(parentDataIndex);
         notifyItemChanged(adapterParentIndex, payload);
     }
+
 
     public void notifyChild(@NonNull ChildCoordinate childCoordinate) {
         int adapterParentIndex = adapterIndexConverter.getParentAdapterIndex(childCoordinate.parentIndex);
         notifyItemChanged(adapterParentIndex + childCoordinate.childRelativeIndex + 1);
     }
 
-
     public void notifyChild(@NonNull ChildCoordinate childCoordinate, @Nullable Object payload) {
         int adapterParentIndex = adapterIndexConverter.getParentAdapterIndex(childCoordinate.parentIndex);
         notifyItemChanged(adapterParentIndex + childCoordinate.childRelativeIndex + 1, payload);
+    }
+
+
+    private boolean isStateChange(Integer val) {
+        return (val ^ EXPANDED) == 0 || (val ^ COLLAPSED) == 0;
     }
 
     private int expand(int index) {
