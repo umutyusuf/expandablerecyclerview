@@ -28,12 +28,12 @@ public class AdapterIndexConverter {
 
     public void expandParent(int dataPosition) {
         defaultIndexProvider.onExpand(dataPosition);
-        cachedIndexProvider.flushCache();
+        flushCache();
     }
 
     public void collapseParent(int dataPosition) {
         defaultIndexProvider.onCollapse(dataPosition);
-        cachedIndexProvider.flushCache();
+        flushCache();
     }
 
     public int calculateTotalItemCount() {
@@ -77,5 +77,9 @@ public class AdapterIndexConverter {
                 .getChildCoordinateFromAdapterIndex(index);
         cachedIndexProvider.cacheChildCoordinate(index, childCoordinate);
         return childCoordinate;
+    }
+
+    public void flushCache() {
+        cachedIndexProvider.flushCache();
     }
 }

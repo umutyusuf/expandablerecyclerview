@@ -138,6 +138,10 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
         notifyItemChanged(adapterParentIndex + childCoordinate.childRelativeIndex + 1, payload);
     }
 
+    public void flushCahce() {
+        adapterIndexConverter.flushCahce();
+    }
+
 
     private boolean isStateChange(Integer val) {
         return (val ^ EXPANDED) == 0 || (val ^ COLLAPSED) == 0;
