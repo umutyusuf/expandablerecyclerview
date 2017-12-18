@@ -58,19 +58,29 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
     public void onBindViewHolder(ExpandableViewHolder holder, int position, List<Object> payloads) {
         if (payloads.isEmpty() || !(payloads.get(0) instanceof Integer) &&
                 (((Integer) payloads.get(0) ^ EXPANDED) != 0 || ((Integer) payloads.get(0) ^ COLLAPSED) != 0)) {
-            super.onBindViewHolder(holder, position, payloads);
+            boolean binded = false;
+            if (holder instanceof ParentViewHolder) {
+                int parentPosition = adapterIndexConverter.getParentPosition(position);
+                binded = ((ParentViewHolder) holder).update(payloads, parentPosition,
+                        adapterIndexConverter.isParentExpanded(parentPosition) ? EXPANDED : COLLAPSED);
+            } else if (holder instanceof ChildViewHolder) {
+                binded = ((ChildViewHolder) holder)
+                        .update(payloads, adapterIndexConverter.getChildCoordinate(position));
+            }
+            if (!binded) {
+                super.onBindViewHolder(holder, position, payloads);
+            }
             return;
         }
-        boolean binded = false;
-        if (holder instanceof ParentViewHolder) {
-            int parentPosition = adapterIndexConverter.getParentPosition(position);
-            binded = ((ParentViewHolder) holder).update(payloads, parentPosition,
-                    adapterIndexConverter.isParentExpanded(parentPosition) ? EXPANDED : COLLAPSED);
-        } else if (holder instanceof ChildViewHolder) {
-            binded = ((ChildViewHolder) holder)
-                    .update(payloads, adapterIndexConverter.getChildCoordinate(position));
+        if (!(holder instanceof ParentViewHolder)) {
+            return;
         }
-        if (!binded) {
+        boolean stateChanged;
+        int parentPosition = adapterIndexConverter.getParentPosition(position);
+        stateChanged = ((ParentViewHolder) holder).onStateChanged(parentPosition,
+                adapterIndexConverter.isParentExpanded(parentPosition) ? EXPANDED : COLLAPSED);
+
+        if (!stateChanged) {
             super.onBindViewHolder(holder, position, payloads);
         }
     }

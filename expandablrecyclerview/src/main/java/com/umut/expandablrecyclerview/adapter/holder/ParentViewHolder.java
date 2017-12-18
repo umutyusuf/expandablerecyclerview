@@ -22,6 +22,10 @@ public abstract class ParentViewHolder extends ExpandableViewHolder<Integer> {
      */
     public abstract void bind(int coordinate, @State int state);
 
+    public boolean onStateChanged(int coordinate, @State int state) {
+        return false;
+    }
+
     public boolean update(@NonNull List<Object> payload, int coordinate, @State int state) {
         return false;
     }
