@@ -58,6 +58,7 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
     public void onBindViewHolder(ExpandableViewHolder holder, int position, List<Object> payloads) {
         if (payloads.isEmpty()) {
             super.onBindViewHolder(holder, position, payloads);
+            return;
         }
         if (!(payloads.get(0) instanceof Integer &&
                 ((Integer) payloads.get(0) ^ EXPANDED) != 0 || ((Integer) payloads.get(0) ^ COLLAPSED) != 0)) {
