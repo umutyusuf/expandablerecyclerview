@@ -13,7 +13,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView view = findViewById(R.id.recycler_view_music_genres);
+        RecyclerView view = (RecyclerView) findViewById(R.id.recycler_view_music_genres);
         MusicExpandableViewAdapter adapter = new MusicExpandableViewAdapter(
                 TestData.mainStreamGenres,
                 TestData.subGenres);

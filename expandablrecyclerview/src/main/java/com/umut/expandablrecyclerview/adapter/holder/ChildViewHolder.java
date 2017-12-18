@@ -13,7 +13,13 @@ public abstract class ChildViewHolder extends ExpandableViewHolder<ChildCoordina
         super(itemView);
     }
 
-    @Override
+    /**
+     * binds the value to view holder
+     *
+     * @param coordinate Coordinate of item
+     */
+    public abstract void bind(@NonNull ChildCoordinate coordinate);
+
     public boolean update(@NonNull List<Object> payload, ChildCoordinate coordinate) {
         return false;
     }

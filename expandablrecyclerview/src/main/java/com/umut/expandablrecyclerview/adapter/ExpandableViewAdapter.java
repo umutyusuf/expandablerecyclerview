@@ -15,7 +15,6 @@ import com.umut.expandablrecyclerview.adapter.index.ComputingExpandableIndexProv
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
-import java.util.List;
 
 import static com.umut.expandablrecyclerview.adapter.ExpandableViewAdapter.State.COLLAPSED;
 import static com.umut.expandablrecyclerview.adapter.ExpandableViewAdapter.State.EXPANDED;
@@ -28,6 +27,7 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
 
     @NonNull
     private final ExpandableDataIndexProvider dataProvider;
+
 
     public ExpandableViewAdapter(@NonNull ExpandableDataIndexProvider dataProvider) {
         this.dataProvider = dataProvider;
@@ -45,27 +45,11 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
     @Override
     public void onBindViewHolder(ExpandableViewHolder holder, int position) {
         if (holder instanceof ParentViewHolder) {
-            holder.bind(adapterIndexConverter.getParentPosition(position));
+            int parentPosition = adapterIndexConverter.getParentPosition(position);
+            ((ParentViewHolder) holder).bind(parentPosition,
+                    adapterIndexConverter.isParentExpanded(parentPosition) ? EXPANDED : COLLAPSED);
         } else if (holder instanceof ChildViewHolder) {
-            holder.bind(adapterIndexConverter.getChildCoordinate(position));
-        }
-    }
-
-    @SuppressWarnings("unchecked")
-    @Override
-    public void onBindViewHolder(ExpandableViewHolder holder, int position, @NonNull List<Object> payloads) {
-        if (payloads.isEmpty()) {
-            super.onBindViewHolder(holder, position, payloads);
-            return;
-        }
-        boolean binded = false;
-        if (holder instanceof ParentViewHolder) {
-            binded = holder.update(payloads, adapterIndexConverter.getParentPosition(position));
-        } else if (holder instanceof ChildViewHolder) {
-            binded = holder.update(payloads, adapterIndexConverter.getChildCoordinate(position));
-        }
-        if (!binded) {
-            super.onBindViewHolder(holder, position, payloads);
+            ((ChildViewHolder) holder).bind(adapterIndexConverter.getChildCoordinate(position));
         }
     }
 
@@ -88,11 +72,14 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
             throw new IllegalArgumentException("Cant expand the given index. Parent Size = " +
                     dataProvider.getParentSize() + ", index = " + index);
         }
+        int parentAdapterIndex;
         if (!adapterIndexConverter.isParentExpanded(index)) {
-            expand(index);
+            parentAdapterIndex = expand(index);
         } else {
-            collapse(index);
+            parentAdapterIndex = collapse(index);
         }
+        notifyItemChanged(parentAdapterIndex, adapterIndexConverter.isParentExpanded(index) ?
+                EXPANDED : COLLAPSED);
     }
 
     public void notifyParent(int parentDataIndex) {
@@ -117,16 +104,18 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
         notifyItemChanged(adapterParentIndex + childCoordinate.childRelativeIndex + 1, payload);
     }
 
-    private void expand(int index) {
+    private int expand(int index) {
         int parentAdapterIndex = adapterIndexConverter.getParentAdapterIndex(index);
         notifyItemRangeInserted(parentAdapterIndex + 1, dataProvider.getChildrenSize(index));
         adapterIndexConverter.expandParent(index);
+        return parentAdapterIndex;
     }
 
-    private void collapse(int index) {
+    private int collapse(int index) {
         int parentAdapterIndex = adapterIndexConverter.getParentAdapterIndex(index);
         notifyItemRangeRemoved(parentAdapterIndex + 1, dataProvider.getChildrenSize(index));
         adapterIndexConverter.collapseParent(index);
+        return parentAdapterIndex;
     }
 
     @IntDef({EXPANDED, COLLAPSED})

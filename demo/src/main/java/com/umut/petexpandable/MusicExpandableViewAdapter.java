@@ -14,10 +14,8 @@ import com.umut.expandablrecyclerview.adapter.holder.ParentViewHolder;
 import com.umut.petexpandable.model.MainStreamGenre;
 import com.umut.petexpandable.model.SubGenre;
 
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class MusicExpandableViewAdapter extends ExpandableViewAdapter {
 
@@ -26,15 +24,11 @@ public class MusicExpandableViewAdapter extends ExpandableViewAdapter {
     @NonNull
     private final Map<MainStreamGenre, List<SubGenre>> subGenres;
 
-    @NonNull
-    private final Set<Integer> expandedParents;
-
     public MusicExpandableViewAdapter(@NonNull List<MainStreamGenre> mainStreamGenres,
                                       @NonNull Map<MainStreamGenre, List<SubGenre>> subGenres) {
         super(new SampleDataIndexProvider(mainStreamGenres, subGenres));
         this.mainStreamGenres = mainStreamGenres;
         this.subGenres = subGenres;
-        this.expandedParents = new HashSet<>();
     }
 
     @Override
@@ -58,24 +52,17 @@ public class MusicExpandableViewAdapter extends ExpandableViewAdapter {
 
         public MainStreamViewHolder(View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.text_view_main_stream_genre_name);
-            expandIndicatorImageView = itemView.findViewById(R.id.image_view_expand_indicator);
+            nameTextView = (TextView) itemView.findViewById(R.id.text_view_main_stream_genre_name);
+            expandIndicatorImageView = (AppCompatImageView) itemView.findViewById(R.id.image_view_expand_indicator);
         }
 
-
         @Override
-        public void bind(@NonNull Integer coordinate) {
+        public void bind(int coordinate, int state) {
             itemView.setOnClickListener((view) -> {
                 toggle(coordinate);
-                if (expandedParents.remove(coordinate)) {
-                    setState(false);
-                } else {
-                    setState(true);
-                    expandedParents.add(coordinate);
-                }
             });
             nameTextView.setText(mainStreamGenres.get(coordinate).name);
-            setState(expandedParents.contains(coordinate));
+            setState(state == State.EXPANDED);
         }
 
         private void setState(boolean expand) {
@@ -95,7 +82,7 @@ public class MusicExpandableViewAdapter extends ExpandableViewAdapter {
 
         public SubGenreViewHolder(View itemView) {
             super(itemView);
-            nameTextView = itemView.findViewById(R.id.text_view_sub_genre_name);
+            nameTextView = (TextView) itemView.findViewById(R.id.text_view_sub_genre_name);
         }
 
         @Override
