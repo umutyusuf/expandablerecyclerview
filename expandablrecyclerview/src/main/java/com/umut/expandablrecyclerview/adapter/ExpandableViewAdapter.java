@@ -139,7 +139,7 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
     }
 
     public void flushCahce() {
-        adapterIndexConverter.flushCahce();
+        adapterIndexConverter.flushCache();
     }
 
 
