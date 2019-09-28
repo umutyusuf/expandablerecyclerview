@@ -2,18 +2,17 @@ package com.umut.expandablrecyclerview.adapter.index
 
 import com.umut.expandablrecyclerview.adapter.ChildCoordinate
 import com.umut.expandablrecyclerview.adapter.data.ExpandableDataIndexProvider
+import com.umut.expandablrecyclerview.adapter.holder.ViewType
 import java.util.*
 
-class ComputingExpandableIndexProvider(private val dataProvider: ExpandableDataIndexProvider) : ExpandableIndexProvider {
+class ComputingExpandableIndexProvider(private val dataProvider: ExpandableDataIndexProvider) :
+    ExpandableIndexProvider {
 
-    private val expandedParents: MutableSet<Int>
 
-    init {
-        expandedParents = HashSet()
-    }
+    private val expandedParents = HashSet<Int>()
 
     override fun getTotalItemCount(): Int {
-        var totalCount = dataProvider.parentSize
+        var totalCount = dataProvider.getParentSize()
         for (parent in expandedParents) {
             totalCount += dataProvider.getChildrenSize(parent)
         }
@@ -30,23 +29,26 @@ class ComputingExpandableIndexProvider(private val dataProvider: ExpandableDataI
         return currentCount
     }
 
-    override fun getViewType(position: Int): Int {
+    override fun getViewTypeForPosition(position: Int): ViewType {
         var nextParentIndex = 0
-        for (i in 0 until dataProvider.parentSize) {
+        for (i in 0 until dataProvider.getParentSize()) {
             if (position == nextParentIndex) {
-                return ExpandableIndexProvider.PARENT
+                return ViewType(dataProvider.getParentViewType(i), true)
             }
             nextParentIndex++
             if (expandedParents.contains(i)) {
                 nextParentIndex += dataProvider.getChildrenSize(i)
             }
         }
-        return ExpandableIndexProvider.CHILD
+        return ViewType(
+            dataProvider.getChildViewType(getChildCoordinateFromAdapterIndex(position)!!),
+            false
+        )
     }
 
     override fun parentIndexFromAdapterPosition(adapterPosition: Int): Int {
         var nextParentIndex = 0
-        for (i in 0 until dataProvider.parentSize) {
+        for (i in 0 until dataProvider.getParentSize()) {
             if (adapterPosition == nextParentIndex) {
                 return i
             }
@@ -72,7 +74,7 @@ class ComputingExpandableIndexProvider(private val dataProvider: ExpandableDataI
 
     override fun getChildCoordinateFromAdapterIndex(adapterPosition: Int): ChildCoordinate? {
         var totalItemCount = 0
-        for (i in 0 until dataProvider.parentSize) {
+        for (i in 0 until dataProvider.getParentSize()) {
             if (adapterPosition < totalItemCount) {
                 return getChildCoordinate(i - 1, adapterPosition, totalItemCount)
             }
@@ -81,8 +83,10 @@ class ComputingExpandableIndexProvider(private val dataProvider: ExpandableDataI
         }
         if (adapterPosition < totalItemCount) {
             try {
-                return getChildCoordinate(dataProvider.parentSize - 1, adapterPosition,
-                        totalItemCount)
+                return getChildCoordinate(
+                    dataProvider.getParentSize() - 1, adapterPosition,
+                    totalItemCount
+                )
             } catch (e: Exception) {
                 throw IllegalStateException("Child Coordinate can not be computed", e)
             }
@@ -91,9 +95,12 @@ class ComputingExpandableIndexProvider(private val dataProvider: ExpandableDataI
         throw IllegalStateException("Child Coordinate can not be computed")
     }
 
-    private fun getChildCoordinate(parentIndex: Int, adapterPosition: Int,
-                                   markedItemCount: Int): ChildCoordinate {
-        val childPositionInParent = adapterPosition - (markedItemCount - dataProvider.getChildrenSize(parentIndex))
+    private fun getChildCoordinate(
+        parentIndex: Int, adapterPosition: Int,
+        markedItemCount: Int
+    ): ChildCoordinate {
+        val childPositionInParent =
+            adapterPosition - (markedItemCount - dataProvider.getChildrenSize(parentIndex))
         return ChildCoordinate(parentIndex, childPositionInParent)
     }
 }

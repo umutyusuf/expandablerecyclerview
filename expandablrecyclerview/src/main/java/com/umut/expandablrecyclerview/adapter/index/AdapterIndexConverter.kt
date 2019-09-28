@@ -1,15 +1,16 @@
 package com.umut.expandablrecyclerview.adapter.index
 
 
-import android.annotation.SuppressLint
+import android.util.SparseArray
+import androidx.core.util.set
 import com.umut.expandablrecyclerview.adapter.ChildCoordinate
+import com.umut.expandablrecyclerview.adapter.holder.ViewType
 import com.umut.expandablrecyclerview.adapter.index.ExpandableIndexProvider.Companion.UNSPECIFIED
-
-import com.umut.expandablrecyclerview.adapter.index.ExpandableIndexProvider.ViewType
 
 class AdapterIndexConverter(private val defaultIndexProvider: ExpandableIndexProvider) {
 
     private val cachedIndexProvider: CachedExpandableIndexProvider = CachedExpandableIndexProvider()
+    private val viewTypeMap = SparseArray<ViewType>()
 
     fun isParentExpanded(dataPosition: Int): Boolean {
         return defaultIndexProvider.isExpanded(dataPosition)
@@ -38,16 +39,25 @@ class AdapterIndexConverter(private val defaultIndexProvider: ExpandableIndexPro
         return defaultIndexProvider.getAdapterIndexForParentAt(index)
     }
 
-    @SuppressLint("WrongConstant")
-    @ViewType
     fun findViewType(index: Int): Int {
-        if (cachedIndexProvider.getViewType(index) != UNSPECIFIED) {
-            return cachedIndexProvider.getViewType(index)
+        val cachedViewType = cachedIndexProvider.getViewTypeForPosition(index)
+        if (cachedViewType != null) {
+            return cachedViewType.hashCode()
         }
-        val viewType = defaultIndexProvider.getViewType(index)
-        cachedIndexProvider.cacheViewType(index, viewType)
-        return viewType
+        return defaultIndexProvider.getViewTypeForPosition(index)?.let { viewType ->
+            cachedIndexProvider.cacheViewType(index, viewType)
+            val viewTypeHashCode = viewType.hashCode()
+            viewTypeMap[viewTypeHashCode] = viewType
+            return@let viewTypeHashCode
+        } ?: 0
     }
+
+    /**
+     * @param viewType computed view type for the view to be created
+     * @return [ViewType] object for given viewType
+     */
+    fun extractViewTypeDetail(viewType: Int): ViewType = viewTypeMap[viewType]
+
 
     fun getParentPosition(index: Int): Int {
         if (cachedIndexProvider.parentIndexFromAdapterPosition(index) != UNSPECIFIED) {
@@ -63,7 +73,7 @@ class AdapterIndexConverter(private val defaultIndexProvider: ExpandableIndexPro
             return cachedIndexProvider.getChildCoordinateFromAdapterIndex(index)
         }
         val childCoordinate = defaultIndexProvider
-                .getChildCoordinateFromAdapterIndex(index)
+            .getChildCoordinateFromAdapterIndex(index)
         cachedIndexProvider.cacheChildCoordinate(index, childCoordinate)
         return childCoordinate
     }

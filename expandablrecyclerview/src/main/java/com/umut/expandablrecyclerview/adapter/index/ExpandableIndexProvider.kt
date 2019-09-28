@@ -1,13 +1,10 @@
 package com.umut.expandablrecyclerview.adapter.index
 
-import androidx.annotation.IntDef
 import com.umut.expandablrecyclerview.adapter.ChildCoordinate
+import com.umut.expandablrecyclerview.adapter.holder.ViewType
 
 interface ExpandableIndexProvider {
     companion object {
-        const val PARENT = 0
-        const val CHILD = 1
-
         const val UNSPECIFIED = -1
     }
 
@@ -15,8 +12,11 @@ interface ExpandableIndexProvider {
 
     fun getAdapterIndexForParentAt(adapterParentIndex: Int): Int
 
-    @ViewType
-    fun getViewType(position: Int): Int
+    /**
+     * @param position position of the view
+     * @return  [ViewType] object containing if it's a parent and externally provided viewType
+     */
+    fun getViewTypeForPosition(position: Int): ViewType?
 
     fun parentIndexFromAdapterPosition(adapterPosition: Int): Int
 
@@ -28,7 +28,4 @@ interface ExpandableIndexProvider {
 
     fun getChildCoordinateFromAdapterIndex(adapterPosition: Int): ChildCoordinate?
 
-    @IntDef(PARENT, CHILD)
-    @kotlin.annotation.Retention(AnnotationRetention.SOURCE)
-    annotation class ViewType
 }

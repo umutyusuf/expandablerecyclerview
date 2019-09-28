@@ -4,14 +4,15 @@ import android.util.SparseArray
 import android.util.SparseIntArray
 
 import com.umut.expandablrecyclerview.adapter.ChildCoordinate
+import com.umut.expandablrecyclerview.adapter.holder.ViewType
 import com.umut.expandablrecyclerview.adapter.index.ExpandableIndexProvider.Companion.UNSPECIFIED
 
 class CachedExpandableIndexProvider : ExpandableIndexProvider {
 
     private var totalItemCount: Int = 0
-    private val parentPositionCache: SparseIntArray = SparseIntArray()
-    private val childCoordinateCache: SparseArray<ChildCoordinate> = SparseArray()
-    private val viewTypeCache: SparseIntArray = SparseIntArray()
+    private val parentPositionCache = SparseIntArray()
+    private val childCoordinateCache = SparseArray<ChildCoordinate>()
+    private val viewTypeCache = SparseArray<ViewType>()
 
     init {
         totalItemCount = UNSPECIFIED
@@ -25,8 +26,8 @@ class CachedExpandableIndexProvider : ExpandableIndexProvider {
         throw UnsupportedOperationException("This operation is not supported.")
     }
 
-    override fun getViewType(position: Int): Int {
-        return viewTypeCache.get(position, UNSPECIFIED)
+    override fun getViewTypeForPosition(position: Int): ViewType? {
+        return viewTypeCache.get(position)
     }
 
     override fun parentIndexFromAdapterPosition(adapterPosition: Int): Int {
@@ -68,7 +69,7 @@ class CachedExpandableIndexProvider : ExpandableIndexProvider {
         this.totalItemCount = totalItemCount
     }
 
-    internal fun cacheViewType(position: Int, @ExpandableIndexProvider.ViewType viewType: Int) {
+    internal fun cacheViewType(position: Int, viewType: ViewType?) {
         this.viewTypeCache.append(position, viewType)
     }
 }
