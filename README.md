@@ -4,6 +4,9 @@ Alternative Expandable View Utilizing Recycler View
 An adapter to allow RecyclerView items to expand/collapse properly. 
 Define your parent and corresponding childs and have expand/collapse functionality out of the box.
 
+## Demo
+<img src="https://github.com/umutyusuf/expandablerecyclerview/blob/master/art/gif_default.gif"/>
+
 ## Dependency
 
 Add this to the `allProjects` section in your project-level **build.gradle** file:
