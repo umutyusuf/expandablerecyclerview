@@ -20,7 +20,7 @@ allprojects {
 Add this to module level **build.gradle** file
 ```gradle
 dependencies {
-	        implementation 'com.github.umutyusuf:expandablerecyclerview:2.0.0'
+	implementation 'com.github.umutyusuf:expandablerecyclerview:2.0.0'
 }
 ```
 
