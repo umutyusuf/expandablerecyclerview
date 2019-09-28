@@ -32,15 +32,15 @@ public final class TestData {
     static Map<MainStreamGenre, List<SubGenre>> getSubGenres(List<MainStreamGenre> mainStreamGenres) {
         Map<MainStreamGenre, List<SubGenre>> subGenres = new HashMap<>();
         for (MainStreamGenre genre : mainStreamGenres) {
-            if (genre.name.equals("ROCK")) {
+            if (genre.getName().equals("ROCK")) {
                 subGenres.put(genre, getRockGenres());
                 continue;
             }
-            if (genre.name.equals("BLUES")) {
+            if (genre.getName().equals("BLUES")) {
                 subGenres.put(genre, getBluesGenres());
                 continue;
             }
-            if (genre.name.equals("JAZZ")) {
+            if (genre.getName().equals("JAZZ")) {
                 subGenres.put(genre, getJazzGenres());
             }
 

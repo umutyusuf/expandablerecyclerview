@@ -1,4 +1,6 @@
 apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
 apply plugin: 'com.github.dcendents.android-maven'
 
 group = 'com.github.umutyusuf'
@@ -19,4 +21,9 @@ android {
 dependencies {
     api deps.recyclerView
     api deps.supportAnnotations
+    implementation deps.androidXKotlin
+    implementation deps.kotlinStdLib
+}
+repositories {
+    mavenCentral()
 }
