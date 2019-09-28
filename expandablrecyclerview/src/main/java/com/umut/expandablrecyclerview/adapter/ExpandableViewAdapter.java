@@ -1,10 +1,11 @@
 package com.umut.expandablrecyclerview.adapter;
 
-import android.support.annotation.IntDef;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
-import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
+
+import androidx.annotation.IntDef;
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.umut.expandablrecyclerview.adapter.data.ExpandableDataIndexProvider;
 import com.umut.expandablrecyclerview.adapter.holder.ChildViewHolder;
@@ -42,7 +43,6 @@ public abstract class ExpandableViewAdapter extends RecyclerView.Adapter<Expanda
                 createChildViewHolder(parent);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public void onBindViewHolder(ExpandableViewHolder holder, int position) {
         if (holder instanceof ParentViewHolder) {

@@ -1,6 +1,6 @@
 package com.umut.expandablrecyclerview.adapter.holder;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.View;
 
 import com.umut.expandablrecyclerview.adapter.ChildCoordinate;

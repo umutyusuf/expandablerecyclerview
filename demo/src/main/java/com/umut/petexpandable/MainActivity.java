@@ -2,9 +2,10 @@ package com.umut.petexpandable;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.RecyclerView;
+
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.RecyclerView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -13,7 +14,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        RecyclerView view = (RecyclerView) findViewById(R.id.recycler_view_music_genres);
+        RecyclerView view = findViewById(R.id.recycler_view_music_genres);
         MusicExpandableViewAdapter adapter = new MusicExpandableViewAdapter(
                 TestData.mainStreamGenres,
                 TestData.subGenres);

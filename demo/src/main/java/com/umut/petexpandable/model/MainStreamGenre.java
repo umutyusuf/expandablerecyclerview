@@ -1,6 +1,6 @@
 package com.umut.petexpandable.model;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 public class MainStreamGenre {
 

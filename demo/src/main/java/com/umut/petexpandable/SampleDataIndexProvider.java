@@ -1,6 +1,6 @@
 package com.umut.petexpandable;
 
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.umut.expandablrecyclerview.adapter.data.ExpandableDataIndexProvider;
 import com.umut.petexpandable.model.MainStreamGenre;

@@ -1,8 +1,7 @@
 package com.umut.expandablrecyclerview.adapter.index;
 
 
-import android.annotation.SuppressLint;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 
 import com.umut.expandablrecyclerview.adapter.ChildCoordinate;
 
@@ -49,7 +48,6 @@ public class AdapterIndexConverter {
         return defaultIndexProvider.getAdapterIndexForParentAt(index);
     }
 
-    @SuppressLint("WrongConstant")
     @ViewType
     public int findViewType(int index) {
         if (cachedIndexProvider.getViewType(index) != UNSPECIFIED) {
