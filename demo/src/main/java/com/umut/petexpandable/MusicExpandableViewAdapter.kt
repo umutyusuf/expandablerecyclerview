@@ -9,6 +9,7 @@ import com.umut.expandablrecyclerview.adapter.ChildCoordinate
 import com.umut.expandablrecyclerview.adapter.ExpandableViewAdapter
 import com.umut.expandablrecyclerview.adapter.holder.ChildViewHolder
 import com.umut.expandablrecyclerview.adapter.holder.ParentViewHolder
+import com.umut.petexpandable.SampleDataIndexProvider.Companion.ROCK_VIEW_TYPE
 import com.umut.petexpandable.model.MainStreamGenre
 import com.umut.petexpandable.model.SubGenre
 
@@ -18,7 +19,7 @@ class MusicExpandableViewAdapter(
 ) : ExpandableViewAdapter(SampleDataIndexProvider(mainStreamGenres, subGenres)) {
 
     override fun createParentViewHolder(container: ViewGroup, viewType: Int): MainStreamViewHolder {
-        if (viewType == -1) {
+        if (viewType == ROCK_VIEW_TYPE) {
             val view = LayoutInflater.from(container.context).inflate(
                 R.layout.item_main_stream_red,
                 container, false
@@ -33,7 +34,7 @@ class MusicExpandableViewAdapter(
     }
 
     override fun createChildViewHolder(container: ViewGroup, viewType: Int): SubGenreViewHolder {
-        if (viewType == -1) {
+        if (viewType == ROCK_VIEW_TYPE) {
             val view = LayoutInflater.from(container.context).inflate(
                 R.layout.item_sub_genre_red,
                 container, false
