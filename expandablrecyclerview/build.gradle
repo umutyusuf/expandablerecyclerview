@@ -6,11 +6,11 @@ apply plugin: 'com.github.dcendents.android-maven'
 group = 'com.github.umutyusuf'
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     buildToolsVersion '28.0.3'
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
+        targetSdkVersion 29
         versionCode 3
         versionName "3.0.0-alpha01"
         consumerProguardFiles 'proguard-rules.pro'
