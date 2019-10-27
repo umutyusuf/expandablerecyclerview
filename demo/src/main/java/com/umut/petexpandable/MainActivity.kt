@@ -17,9 +17,12 @@ class MainActivity : AppCompatActivity() {
             TestData.subGenres
         )
         view.adapter = adapter
+        adapter.updateDataSource(
+            SampleDataIndexProvider(
+                TestData.mainStreamGenres,
+                TestData.subGenres
+            )
+        )
 
-        for (i in TestData.mainStreamGenres.indices) {
-            adapter.toggle(i)
-        }
     }
 }

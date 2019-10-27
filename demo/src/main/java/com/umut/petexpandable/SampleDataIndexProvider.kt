@@ -1,40 +1,28 @@
 package com.umut.petexpandable
 
-import com.umut.expandablrecyclerview.adapter.ChildCoordinate
-import com.umut.expandablrecyclerview.adapter.data.ExpandableDataIndexProvider
+import com.umut.expandablrecyclerview.item.ListViewItem
+import com.umut.expandablrecyclerview.provider.ExpandableDataSource
 import com.umut.petexpandable.model.MainStreamGenre
 import com.umut.petexpandable.model.SubGenre
 
 class SampleDataIndexProvider(
     private val mainStreamGenres: List<MainStreamGenre>,
     private val subGenres: Map<MainStreamGenre, List<SubGenre>>
-) : ExpandableDataIndexProvider {
-    companion object {
-        const val ROCK_VIEW_TYPE = 1
+) : ExpandableDataSource<SubGenre, MainStreamGenre> {
+
+    override fun getItems(): Iterable<MainStreamGenre> {
+        return mainStreamGenres
     }
 
-    override fun getChildrenSize(parentIndex: Int): Int {
-        return subGenres[mainStreamGenres[parentIndex]]?.size ?: 0
-    }
+    override fun <I : ListViewItem> getChildDataSource(listViewItem: ListViewItem): ExpandableDataSource<I, SubGenre>? {
+        return object : ExpandableDataSource<I, SubGenre> {
+            override fun getItems(): Iterable<SubGenre> {
+                return subGenres[listViewItem as MainStreamGenre] ?: emptyList()
+            }
 
-    override fun getParentSize(): Int {
-        return mainStreamGenres.size
-    }
-
-    override fun getParentViewType(parentIndex: Int): Int {
-        if (mainStreamGenres[parentIndex].name == "ROCK") {
-            return ROCK_VIEW_TYPE
+            override fun <R : ListViewItem> getChildDataSource(
+                listViewItem: ListViewItem
+            ): ExpandableDataSource<R, I>? = null
         }
-        return super.getParentViewType(parentIndex)
-    }
-
-    override fun getChildViewType(childCoordinate: ChildCoordinate): Int {
-        val mainStreamGenre = mainStreamGenres[childCoordinate.parentIndex]
-        if (mainStreamGenre.name == "ROCK"
-            && subGenres[mainStreamGenre]?.get(childCoordinate.childRelativeIndex)?.name == "Grunge"
-        ) {
-            return ROCK_VIEW_TYPE
-        }
-        return super.getChildViewType(childCoordinate)
     }
 }

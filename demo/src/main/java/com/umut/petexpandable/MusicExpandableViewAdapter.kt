@@ -5,18 +5,19 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import com.umut.expandablrecyclerview.adapter.ChildCoordinate
-import com.umut.expandablrecyclerview.adapter.ExpandableViewAdapter
-import com.umut.expandablrecyclerview.adapter.holder.ChildViewHolder
-import com.umut.expandablrecyclerview.adapter.holder.ParentViewHolder
-import com.umut.petexpandable.SampleDataIndexProvider.Companion.ROCK_VIEW_TYPE
+import com.umut.expandablrecyclerview.ExpandableRecyclerViewAdapter
+import com.umut.expandablrecyclerview.holder.ChildViewHolder
+import com.umut.expandablrecyclerview.holder.ParentViewHolder
+import com.umut.expandablrecyclerview.item.ParentViewItem
+import com.umut.expandablrecyclerview.position.ItemPosition
 import com.umut.petexpandable.model.MainStreamGenre
+import com.umut.petexpandable.model.MainStreamGenre.Companion.ROCK_VIEW_TYPE
 import com.umut.petexpandable.model.SubGenre
 
 class MusicExpandableViewAdapter(
     private val mainStreamGenres: List<MainStreamGenre>,
     private val subGenres: Map<MainStreamGenre, List<SubGenre>>
-) : ExpandableViewAdapter(SampleDataIndexProvider(mainStreamGenres, subGenres)) {
+) : ExpandableRecyclerViewAdapter<SubGenre, MainStreamGenre>() {
 
     override fun createParentViewHolder(container: ViewGroup, viewType: Int): MainStreamViewHolder {
         if (viewType == ROCK_VIEW_TYPE) {
@@ -48,18 +49,30 @@ class MusicExpandableViewAdapter(
         return SubGenreViewHolder(view)
     }
 
-    inner class MainStreamViewHolder(itemView: View) : ParentViewHolder(itemView) {
+    inner class MainStreamViewHolder(private val view: View) :
+        ParentViewHolder<MainStreamGenre>(view) {
+
+        override fun bind(position: ItemPosition, item: MainStreamGenre) {
+            view.setOnClickListener {
+                if (!item.isExpanded()) {
+                    expand(position.childIndex)
+                } else {
+                    collapse(position.childIndex)
+                }
+            }
+            nameTextView.text = mainStreamGenres[position.childIndex].name
+            setState(item.isExpanded())
+        }
+
+        override fun onToggle(parentItem: ParentViewItem) {
+            setState(parentItem.isExpanded())
+        }
 
         private val nameTextView: TextView =
             itemView.findViewById(R.id.text_view_main_stream_genre_name)
         private val expandIndicatorImageView: AppCompatImageView =
             itemView.findViewById(R.id.image_view_expand_indicator)
 
-        override fun bind(coordinate: Int, state: Int) {
-            itemView.setOnClickListener { toggle(coordinate) }
-            nameTextView.text = mainStreamGenres[coordinate].name
-            setState(state == State.EXPANDED)
-        }
 
         private fun setState(expand: Boolean) {
             if (!expand) {
@@ -72,16 +85,16 @@ class MusicExpandableViewAdapter(
     }
 
     inner class SubGenreViewHolder internal constructor(itemView: View) :
-        ChildViewHolder(itemView) {
+        ChildViewHolder<SubGenre>(itemView) {
+        override fun bindChild(
+            nestedPosition: ItemPosition,
+            item: SubGenre
+        ) {
+            nameTextView.text = item.name
+        }
 
 
         private val nameTextView: TextView = itemView.findViewById(R.id.text_view_sub_genre_name)
-
-        override fun bind(coordinate: ChildCoordinate) {
-            nameTextView.text = subGenres[mainStreamGenres[coordinate.parentIndex]]
-                ?.get(coordinate.childRelativeIndex)
-                ?.name ?: ""
-        }
 
     }
 }
