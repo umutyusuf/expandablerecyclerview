@@ -1,8 +1,8 @@
-package com.umut.expandablrecyclerview.holder
+package com.umut.expandablerecyclerview.holder
 
 import android.view.View
-import com.umut.expandablrecyclerview.item.ListViewItem
-import com.umut.expandablrecyclerview.position.ItemPosition
+import com.umut.expandablerecyclerview.item.ListViewItem
+import com.umut.expandablerecyclerview.position.ItemPosition
 
 abstract class ChildViewHolder<T : ListViewItem>(view: View) :
     ExpandableViewHolder(view) {

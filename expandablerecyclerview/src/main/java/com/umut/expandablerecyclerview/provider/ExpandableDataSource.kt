@@ -1,10 +1,9 @@
-package com.umut.expandablrecyclerview.provider
+package com.umut.expandablerecyclerview.provider
 
-import com.umut.expandablrecyclerview.item.ListViewItem
-import com.umut.expandablrecyclerview.item.ParentViewItem
+import com.umut.expandablerecyclerview.item.ListViewItem
 
 /**
- * Contract for providing data for [com.umut.expandablrecyclerview.ExpandableRecyclerViewAdapter]
+ * Contract for providing data for [com.umut.expandablerecyclerview.ExpandableRecyclerViewAdapter]
  * @param P type of items
  * @param C type of items in child Data source
  */

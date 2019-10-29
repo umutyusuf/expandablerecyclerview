@@ -1,7 +1,7 @@
 package com.umut.petexpandable.model
 
-import com.umut.expandablrecyclerview.item.ChildViewItem
-import com.umut.expandablrecyclerview.item.ListViewItem
+import com.umut.expandablerecyclerview.item.ChildViewItem
+import com.umut.expandablerecyclerview.item.ListViewItem
 
 class SubGenre(val name: String) : ChildViewItem {
 

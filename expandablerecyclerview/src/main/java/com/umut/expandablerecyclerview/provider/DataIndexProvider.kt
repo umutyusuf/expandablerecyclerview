@@ -1,10 +1,10 @@
-package com.umut.expandablrecyclerview.provider
+package com.umut.expandablerecyclerview.provider
 
 import androidx.recyclerview.widget.DiffUtil
-import com.umut.expandablrecyclerview.item.ItemViewType
-import com.umut.expandablrecyclerview.item.ListViewItem
-import com.umut.expandablrecyclerview.item.ParentViewItem
-import com.umut.expandablrecyclerview.position.ItemPosition
+import com.umut.expandablerecyclerview.item.ItemViewType
+import com.umut.expandablerecyclerview.item.ListViewItem
+import com.umut.expandablerecyclerview.item.ParentViewItem
+import com.umut.expandablerecyclerview.position.ItemPosition
 
 /**
  * Internal helper contract.

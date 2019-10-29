@@ -1,7 +1,7 @@
 package com.umut.petexpandable
 
-import com.umut.expandablrecyclerview.item.ListViewItem
-import com.umut.expandablrecyclerview.provider.ExpandableDataSource
+import com.umut.expandablerecyclerview.item.ListViewItem
+import com.umut.expandablerecyclerview.provider.ExpandableDataSource
 import com.umut.petexpandable.model.MainStreamGenre
 import com.umut.petexpandable.model.SubGenre
 

@@ -1,15 +1,15 @@
-package com.umut.expandablrecyclerview.provider.impl
+package com.umut.expandablerecyclerview.provider.impl
 
 import android.util.SparseArray
 import androidx.core.util.set
 import androidx.recyclerview.widget.DiffUtil
-import com.umut.expandablrecyclerview.item.ItemViewType
-import com.umut.expandablrecyclerview.item.ListViewItem
-import com.umut.expandablrecyclerview.item.ListViewItemDiffCallback
-import com.umut.expandablrecyclerview.item.ParentViewItem
-import com.umut.expandablrecyclerview.position.ItemPosition
-import com.umut.expandablrecyclerview.provider.DataIndexProvider
-import com.umut.expandablrecyclerview.provider.ExpandableDataSource
+import com.umut.expandablerecyclerview.item.ItemViewType
+import com.umut.expandablerecyclerview.item.ListViewItem
+import com.umut.expandablerecyclerview.item.ListViewItemDiffCallback
+import com.umut.expandablerecyclerview.item.ParentViewItem
+import com.umut.expandablerecyclerview.position.ItemPosition
+import com.umut.expandablerecyclerview.provider.DataIndexProvider
+import com.umut.expandablerecyclerview.provider.ExpandableDataSource
 
 internal class DataIndexProviderImpl<in C : ListViewItem, in P : ParentViewItem> :
     DataIndexProvider<C, P> {

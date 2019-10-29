@@ -1,17 +1,17 @@
-package com.umut.expandablrecyclerview
+package com.umut.expandablerecyclerview
 
 import android.util.Log
 import android.view.ViewGroup
 import androidx.annotation.CallSuper
 import androidx.recyclerview.widget.RecyclerView
-import com.umut.expandablrecyclerview.holder.ChildViewHolder
-import com.umut.expandablrecyclerview.holder.ExpandableViewHolder
-import com.umut.expandablrecyclerview.holder.ParentViewHolder
-import com.umut.expandablrecyclerview.item.ListViewItem
-import com.umut.expandablrecyclerview.item.ParentViewItem
-import com.umut.expandablrecyclerview.position.ItemPosition
-import com.umut.expandablrecyclerview.provider.ExpandableDataSource
-import com.umut.expandablrecyclerview.provider.impl.DataIndexProviderImpl
+import com.umut.expandablerecyclerview.holder.ChildViewHolder
+import com.umut.expandablerecyclerview.holder.ExpandableViewHolder
+import com.umut.expandablerecyclerview.holder.ParentViewHolder
+import com.umut.expandablerecyclerview.item.ListViewItem
+import com.umut.expandablerecyclerview.item.ParentViewItem
+import com.umut.expandablerecyclerview.position.ItemPosition
+import com.umut.expandablerecyclerview.provider.ExpandableDataSource
+import com.umut.expandablerecyclerview.provider.impl.DataIndexProviderImpl
 
 /**
  * [RecyclerView.Adapter] replacement for expandable implementation.

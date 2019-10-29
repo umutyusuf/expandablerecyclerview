@@ -1,0 +1,54 @@
+apply plugin: 'com.android.library'
+apply plugin: 'kotlin-android'
+apply plugin: 'kotlin-android-extensions'
+apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+group = 'com.bintray'
+
+ext {
+    bintrayRepo = 'ExpandableRecyclerView'
+    bintrayName = 'ExpandableRecyclerView'
+
+    publishedGroupId = 'com.umut.expandablerecyclerview'
+    libraryName = 'ExpandableRecylerView'
+    artifact = 'expandablerecyclerview'
+
+    libraryDescription = 'Alternative Implementation to provide expand/collapse functionality for recyclerview'
+
+    siteUrl = 'https://github.com/umutyusuf/expandablerecyclerview'
+    gitUrl = 'https://github.com/umutyusuf/expandablerecyclerview.git'
+
+    libraryVersion = '3.0.0-alpha01'
+
+    developerId = 'umutyusuf'
+    developerName = 'Umut Yusuf'
+    developerEmail = 'umutyusuft@gmail.com'
+
+    licenseName = 'The Apache Software License, Version 2.0'
+    licenseUrl = 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+    allLicenses = ["Apache-2.0"]
+}
+
+android {
+    compileSdkVersion 29
+    defaultConfig {
+        minSdkVersion 14
+        targetSdkVersion 29
+        versionName libraryVersion
+        consumerProguardFiles 'proguard-rules.pro'
+    }
+
+}
+
+dependencies {
+    api deps.recyclerView
+    api deps.supportAnnotations
+    implementation deps.androidXKotlin
+    implementation deps.kotlinStdLib
+}
+repositories {
+    mavenCentral()
+}
+
+apply from: 'lib-release.gradle'

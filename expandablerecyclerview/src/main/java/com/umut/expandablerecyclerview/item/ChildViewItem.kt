@@ -1,4 +1,4 @@
-package com.umut.expandablrecyclerview.item
+package com.umut.expandablerecyclerview.item
 
 interface ChildViewItem : ListViewItem {
     override fun isParent() = false

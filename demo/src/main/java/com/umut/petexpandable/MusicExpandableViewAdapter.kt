@@ -5,11 +5,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.appcompat.widget.AppCompatImageView
-import com.umut.expandablrecyclerview.ExpandableRecyclerViewAdapter
-import com.umut.expandablrecyclerview.holder.ChildViewHolder
-import com.umut.expandablrecyclerview.holder.ParentViewHolder
-import com.umut.expandablrecyclerview.item.ParentViewItem
-import com.umut.expandablrecyclerview.position.ItemPosition
+import com.umut.expandablerecyclerview.ExpandableRecyclerViewAdapter
+import com.umut.expandablerecyclerview.holder.ChildViewHolder
+import com.umut.expandablerecyclerview.holder.ParentViewHolder
+import com.umut.expandablerecyclerview.item.ParentViewItem
+import com.umut.expandablerecyclerview.position.ItemPosition
 import com.umut.petexpandable.model.MainStreamGenre
 import com.umut.petexpandable.model.MainStreamGenre.Companion.ROCK_VIEW_TYPE
 import com.umut.petexpandable.model.SubGenre

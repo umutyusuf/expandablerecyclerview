@@ -1,4 +1,4 @@
-package com.umut.expandablrecyclerview.item
+package com.umut.expandablerecyclerview.item
 
 interface ListViewItem {
     companion object {

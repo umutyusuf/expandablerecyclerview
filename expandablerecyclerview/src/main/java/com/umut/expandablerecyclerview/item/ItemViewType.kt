@@ -1,4 +1,4 @@
-package com.umut.expandablrecyclerview.item
+package com.umut.expandablerecyclerview.item
 
 /**
  * Internal class that represents the view type more verbose to differentiate
