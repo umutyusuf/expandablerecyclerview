@@ -8,6 +8,7 @@ Define your parent and corresponding childs and have expand/collapse functionali
 <img src="https://github.com/umutyusuf/expandablerecyclerview/blob/master/art/gif_default.gif"/>
 
 ## Dependency
+[![](https://jitpack.io/v/umutyusuf/expandablerecyclerview.svg)](https://jitpack.io/#umutyusuf/expandablerecyclerview)
 
 Add this to the `allProjects` section in your project-level **build.gradle** file:
 ```gradle
